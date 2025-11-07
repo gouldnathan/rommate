@@ -174,6 +174,7 @@ impl RetroarchService {
     pub async fn play(&self, app_handle: &AppHandle) -> Result<(), Error> {
         let download_dir = DownloaderService::get_download_path()?;
         let shell = app_handle.shell();
+        println!("{}", self.core_filename);
         let command = match self.runner {
             RetroarchRunner::FlatpakLinux => Ok(shell.command("flatpak").args([
                 "run",

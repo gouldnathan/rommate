@@ -5,6 +5,7 @@ import Layout from '@/layout'
 import RomDetail from '@/views/rom'
 import Collection from '@/views/collection'
 import Platform from '@/views/platform'
+import PlatformConfigure from '@/views/platform-configure'
 import AutoUpdater from '@/components/auto-updater'
 
 const router = createBrowserRouter([
@@ -15,7 +16,8 @@ const router = createBrowserRouter([
 			{index: true, Component: Home},
 			{path: '/rom/:id', Component: RomDetail},
 			{path: '/collection/:id/:collectionType', Component: Collection},
-			{path: '/platform/:id', Component: Platform}
+			{path: '/platform/:id', Component: Platform},
+			{path: '/platform/:id/configure', Component: PlatformConfigure}
 		]
 	},
 	{

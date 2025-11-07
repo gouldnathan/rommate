@@ -23,10 +23,10 @@ export default function Home() {
 
 	useEffect(() => {
 		const checkAuthentication = async () => {
-			const isLoggedIn = await isAuthenticated()
-			if (!isLoggedIn) {
-				navigate('/login')
-			}
+			// const isLoggedIn = await isAuthenticated()
+			// if (!isLoggedIn) {
+			// 	navigate('/login')
+			// }
 		}
 
 		checkAuthentication()

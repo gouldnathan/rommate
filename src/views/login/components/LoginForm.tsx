@@ -3,7 +3,7 @@ import {invoke} from '@tauri-apps/api/core'
 import {Button} from '@/components/ui/button'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import {useCallback, useState} from 'react'
-import FormInput from '@/components/ui/form-input'
+import {FormInput} from '@/components/ui/form-input'
 import AlertError from '@/components/ui/alert-error'
 import {useNavigate} from 'react-router'
 

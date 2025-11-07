@@ -1,8 +1,7 @@
 import * as React from 'react'
-import {ComponentIcon, Gamepad2, Home, SearchIcon, Settings, SquaresUnite} from 'lucide-react'
+import {ComponentIcon, Gamepad2, Home, SearchIcon, SquaresUnite} from 'lucide-react'
 
 import {NavItem, NavMain} from '@/components/nav-main'
-import {NavProjects} from '@/components/nav-projects'
 import {NavUser} from '@/components/nav-user'
 import {
 	Sidebar,
@@ -22,16 +21,6 @@ import useSearchDialog from '@/hooks/use-search-dialog'
 import DownloadManager from './download-manager'
 import {getCollectionType} from '@/utils/collection'
 
-const data = {
-	settings: [
-		{
-			name: 'General',
-			url: '/',
-			icon: Settings
-		}
-	]
-}
-
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 	const {toggleSearchDialog} = useSearchDialog()
 	const {data: currentUser, error: userError} = useLoggedInUser()
@@ -47,7 +36,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 					? platforms
 							.filter((platform) => platform.romCount !== 0)
 							?.map((platform) => ({
-								title: platform.name,
+								title: platform.fsSlug,
 								url: `/platform/${platform.id}`,
 								badge: platform.romCount.toString()
 							}))
@@ -105,7 +94,6 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 					</SidebarMenuButton>
 				</SidebarGroup>
 				<NavMain items={[platformMenuItem, collectionMenuItem]} />
-				<NavProjects projects={data.settings} />
 			</SidebarContent>
 			<SidebarFooter>
 				<SidebarTrigger />

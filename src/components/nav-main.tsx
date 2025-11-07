@@ -1,4 +1,4 @@
-import {ChevronRight, type LucideIcon} from 'lucide-react'
+import {ChevronRight, Settings, type LucideIcon} from 'lucide-react'
 
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible'
 import {
@@ -10,6 +10,7 @@ import {
 	SidebarMenuSub,
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
+	SidebarMenuAction,
 	useSidebar
 } from '@/components/ui/sidebar'
 import {Badge} from './ui/badge'
@@ -64,6 +65,14 @@ const CollapsibleItem = ({item}: {item: NavItem}) => {
 		[isOpened, item.title, navigate]
 	)
 
+	const onClickConfigure = useCallback(
+		(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, url: string) => {
+			event.stopPropagation()
+			navigate(`${url}/configure`, {state: {navItems: {[item.title]: isOpened}}})
+		},
+		[navigate, item.title, isOpened]
+	)
+
 	return (
 		<Collapsible key={item.title} asChild defaultOpen={isOpened} open={isOpened} className='group/collapsible'>
 			<SidebarMenuItem>
@@ -79,10 +88,11 @@ const CollapsibleItem = ({item}: {item: NavItem}) => {
 						{item.items?.map((subItem) => (
 							<SidebarMenuSubItem key={subItem.title}>
 								<SidebarMenuSubButton asChild>
-									<div
-										onClick={(event) => onClickItem(event, subItem.url)}
-										className='flex justify-between cursor-pointer'
-									>
+									<div onClick={(event) => onClickItem(event, subItem.url)} className='flex cursor-pointer'>
+										<SidebarMenuAction onClick={(event) => onClickConfigure(event, subItem.url)}>
+											<Settings />
+											<span className='sr-only'>More</span>
+										</SidebarMenuAction>
 										<span className='max-w-[8.75rem] overflow-hidden text-ellipsis whitespace-nowrap'>
 											{subItem.title}
 										</span>

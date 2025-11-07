@@ -16,7 +16,9 @@ export const EMULATION_READY_PLATFORMS: RommPlatform[] = [
 ]
 
 export const isPlatformEmulationReady = (platform: RommPlatform) => {
-	return EMULATION_READY_PLATFORMS.some((emulationPlatform) => emulationPlatform === platform)
+	return EMULATION_READY_PLATFORMS.some(
+		(emulationPlatform) => emulationPlatform.toLowerCase() === platform.toLowerCase()
+	)
 }
 
 export const coreConfig: Record<string, RetroarchCore[]> = {
