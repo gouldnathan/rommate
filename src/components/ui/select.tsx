@@ -2,9 +2,13 @@ import * as React from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
 
 import {cn} from '@/lib/utils'
+import {UseFormRegisterReturn} from 'react-hook-form'
 
-function Select({...props}: React.ComponentProps<typeof SelectPrimitive.Root>) {
-	return <SelectPrimitive.Root data-slot='select' {...props} />
+function Select({
+	register,
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Root> & {register?: UseFormRegisterReturn}) {
+	return <SelectPrimitive.Root data-slot='select' {...register} {...props} />
 }
 
 function SelectPortal({...props}: React.ComponentProps<typeof SelectPrimitive.Portal>) {

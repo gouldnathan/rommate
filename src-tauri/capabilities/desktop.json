@@ -2,5 +2,12 @@
 	"identifier": "desktop-capability",
 	"platforms": ["macOS", "windows", "linux"],
 	"windows": ["main"],
-	"permissions": ["updater:default", "dialog:allow-open"]
+	"permissions": [
+		"updater:default",
+		"dialog:allow-open",
+		{
+			"identifier": "fs:allow-app-read",
+			"allow": [{"path": "$HOME/.var/app/org.libretro.RetroArch/config/retroarch/cores"}]
+		}
+	]
 }

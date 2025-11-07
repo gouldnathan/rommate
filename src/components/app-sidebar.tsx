@@ -28,7 +28,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 	const {data: collections, error: collectionsError} = useCollections()
 	const platformMenuItem: NavItem = React.useMemo(
 		() => ({
-			title: 'Platfoms',
+			title: 'Platforms',
 			icon: Gamepad2,
 			url: '#',
 			items:

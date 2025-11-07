@@ -37,19 +37,24 @@ function PathFormInput({
 	onFileSelected,
 	onChange,
 	value,
+	directory,
+	multiple,
 	...inputProps
 }: InputHTMLAttributes<HTMLInputElement> & {
 	label: string
 	register: UseFormRegisterReturn
 	onFileSelected: (path: string | null) => void
 	onChange: ChangeEventHandler<HTMLInputElement>
+	directory?: boolean
+	multiple?: boolean
 	value: string | null
 	fieldError?: FieldError
 }) {
-	const internalOnClick = async () => {
+	const internalOnClick = async (e: MouseEvent) => {
+		e.preventDefault()
 		const file = await open({
-			multiple: false,
-			directory: false
+			multiple: multiple ?? false,
+			directory: directory ?? false
 		})
 		onFileSelected(file)
 	}
@@ -60,7 +65,7 @@ function PathFormInput({
 				{label}
 			</Label>
 			<div className='flex'>
-				<PathInput value={value} onChange={onChange} />
+				<PathInput value={value} {...register} onChange={onChange} />
 				<button
 					onClick={internalOnClick}
 					className="bg-input text-primary shadow-xs h-9 px-4 py-2 has-[>svg]:px-3
