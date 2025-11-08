@@ -9,7 +9,7 @@ export default function useStore() {
 		return store.get<T>(key)
 	}, [])
 
-	const set = useCallback(async (key: string, value: string) => {
+	const set = useCallback(async (key: string, value: unknown) => {
 		const store = await load(STORE_PATH)
 		store.set(key, value)
 	}, [])

@@ -2,6 +2,7 @@ import {cn} from '@/lib/utils'
 import {Button} from '@/components/ui/button'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {useState, useCallback} from 'react'
+import useStore from '@/hooks/use-store'
 import AlertError from '@/components/ui/alert-error'
 import Heading from '@/components/ui/heading'
 import {
@@ -27,29 +28,28 @@ export type RetroarchConfigInputs = {
 }
 
 export function PlatformConfigureForm({className, title, ...props}: React.ComponentProps<'form'>) {
-	const {
-		register,
-		handleSubmit,
-		formState: {errors, isValid, isSubmitting}
-	} = useForm<RetroarchConfigInputs>()
+	const form = useForm<RetroarchConfigInputs>()
+
 	const [formError, setFormError] = useState<string | null>(null)
 	const [runnerType, setRunnerType] = useState<string | null>(null)
 	const [useFlatpak, setUseFlatpak] = useState<boolean>(false)
+	const {get, set} = useStore()
 
 	const onSubmit: SubmitHandler<RetroarchConfigInputs> = useCallback(
 		async (payload) => {
-			console.log(payload)
-			if (!isValid) {
+			if (!form.formState.isValid) {
 				return
 			}
 			setFormError(null)
 			try {
-				console.log('Valid')
+				const platformConfigs = ((await get('platformConfigs')) as object) ?? {}
+				const key = title ?? ''
+				await set('platformConfigs', {...platformConfigs, [key]: payload})
 			} catch (error) {
 				setFormError((error as Error).message)
 			}
 		},
-		[isValid]
+		[get, set, form.formState.isValid, title]
 	)
 
 	const options = Object.entries(PlatformRunner).map(([key, val]) => ({
@@ -62,7 +62,7 @@ export function PlatformConfigureForm({className, title, ...props}: React.Compon
 			<Heading variant={'h1'} className='flex gap-2'>
 				<span>{title}</span>
 			</Heading>
-			<form className={cn('flex flex-col gap-6', className)} {...props} onSubmit={handleSubmit(onSubmit)}>
+			<form className={cn('flex flex-col gap-6', className)} {...props} onSubmit={form.handleSubmit(onSubmit)}>
 				<div className='grid grid-cols-6 gap-6'>
 					<div className='col-start-1 col-span-3 gap-7 flex items-center'>
 						<Select onValueChange={(e) => setRunnerType(e)}>
@@ -90,12 +90,17 @@ export function PlatformConfigureForm({className, title, ...props}: React.Compon
 					</div>
 				</div>
 				{runnerType === PlatformRunner.Retroarch && (
-					<RetroarchConfigForm register={register} errors={errors} useFlatpak={useFlatpak} />
+					<RetroarchConfigForm
+						register={form.register}
+						errors={form.formState.errors}
+						useFlatpak={useFlatpak}
+						form={form}
+					/>
 				)}
 				{runnerType === PlatformRunner.PCSX2 && <Button>PCSX2</Button>}
 				{runnerType === PlatformRunner.Dolphin && <Button>Dolphin</Button>}
 				{runnerType && (
-					<Button type='submit' className='w-50' disabled={isSubmitting}>
+					<Button type='submit' className='w-50' disabled={form.formState.isSubmitting}>
 						Save
 					</Button>
 				)}

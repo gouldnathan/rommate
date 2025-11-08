@@ -1,4 +1,4 @@
-import {FieldErrors, UseFormRegister} from 'react-hook-form'
+import {FieldErrors, UseFormRegister, UseFormReturn, Controller} from 'react-hook-form'
 import {FormInput, PathFormInput} from '@/components/ui/form-input'
 import {RetroarchConfigInputs} from './platform-configure'
 import {
@@ -20,11 +20,13 @@ import {homeDir} from '@tauri-apps/api/path'
 export function RetroarchConfigForm({
 	register,
 	errors,
-	useFlatpak
+	useFlatpak,
+	form
 }: {
 	register: UseFormRegister<RetroarchConfigInputs>
 	errors: FieldErrors<RetroarchConfigInputs>
 	useFlatpak: boolean
+	form: UseFormReturn<RetroarchConfigInputs, any, RetroarchConfigInputs>
 }) {
 	const [installPath, setInstallPath] = useState<string>('')
 	const [coreOptions, setCoreOptions] = useState<{label: string; value: string}[] | null>(null)
@@ -67,25 +69,32 @@ export function RetroarchConfigForm({
 					fieldError={errors.installPath}
 				/>
 			)}
-			<Select name='core' register={register('core')}>
-				<SelectTrigger className='col-start-1'>
-					<SelectValue placeholder='Select a core...' />
-					<SelectIcon>
-						<ChevronDownIcon />
-					</SelectIcon>
-				</SelectTrigger>
-				<SelectPortal>
-					<SelectContent position='popper' className='w-100'>
-						<SelectViewport>
-							{coreOptions?.map((o) => (
-								<SelectItem key={o.value} value={o.value}>
-									<SelectItemText>{o.label}</SelectItemText>
-								</SelectItem>
-							))}
-						</SelectViewport>
-					</SelectContent>
-				</SelectPortal>
-			</Select>
+			<Controller
+				name='core'
+				control={form.control}
+				defaultValue=''
+				render={({field}) => (
+					<Select name='core' onValueChange={field.onChange}>
+						<SelectTrigger className='col-start-1'>
+							<SelectValue placeholder='Select a core...' />
+							<SelectIcon>
+								<ChevronDownIcon />
+							</SelectIcon>
+						</SelectTrigger>
+						<SelectPortal>
+							<SelectContent position='popper' className='w-100'>
+								<SelectViewport>
+									{coreOptions?.map((o) => (
+										<SelectItem key={o.value} value={o.value}>
+											<SelectItemText>{o.label}</SelectItemText>
+										</SelectItem>
+									))}
+								</SelectViewport>
+							</SelectContent>
+						</SelectPortal>
+					</Select>
+				)}
+			/>
 			<FormInput
 				className='col-start-1 col-span-2'
 				label='Extra Arguments'
